@@ -1,5 +1,5 @@
-const util = require('util');
 const glob = require('glob');
+const util = require('util');
 
 const globPromise = util.promisify(glob);
 
@@ -20,13 +20,26 @@ const getFolders = async (sources) => {
         if (glob.hasMagic(source)) {
             folders.push(...await globPromise(source.endsWith('/') ? source : `${source}/`));
         } else {
-            folders.push(source);
+            folders.push(!source.endsWith('/') ? `${source}/` : source);
         }
     }
 
     return folders;
 };
 
+/**
+ * Gives an array with the paths
+ * of the files matching the extension
+ * in the given folder
+ * @param {string} folder
+ * @param {string} extension
+ * @return {Promise<string[]>}
+ */
+const getFilePaths = (folder, extension) => {
+    return globPromise(`${folder}*.${extension}`);
+};
+
 module.exports = {
+    getFilePaths,
     getFolders,
 };
