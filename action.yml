@@ -1,0 +1,19 @@
+name: 'Output'
+description: 'Outputs markdown content to pull requests'
+inputs:
+  token:
+    description: 'GitHub token'
+    required: true
+  sources:
+    description: 'String with folders containing md files separated by commas'
+    required: true
+  ignoreActionLabel:
+    description: 'Label to avoid executing the action'
+    required: false
+    default: '-output'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: edit-2
+  color: green

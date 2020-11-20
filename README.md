@@ -1,5 +1,5 @@
-# 📋 Output
-GitHub Action to output markdown information to pull requests.
+# ✍🏽 Output
+GitHub Action to output markdown content to pull requests.
 
 ## Inputs
 
