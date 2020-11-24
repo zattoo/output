@@ -41,17 +41,17 @@ const run = async () => {
 
         const folders = await getFolders(sources);
 
-        for await (const path of folders) {
+        await Promise.all(folders.map(async (path) => {
             const filePaths = await getFilePaths(path, 'md');
-            for await (const filePath of filePaths) {
+            await Promise.all(filePaths.map(async (filePath) => {
                 const fileContent = await readFile(filePath, {encoding: 'utf-8'});
                 if (fileContent) {
                     content.push(fileContent
                         .trim()
                         .concat('\n'));
                 }
-            }
-        }
+            }));
+        }));
 
         const text = content
             .join('\n')
