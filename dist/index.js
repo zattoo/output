@@ -7371,17 +7371,17 @@ const run = async () => {
 
         const folders = await getFolders(sources);
 
-        for await (const path of folders) {
+        await Promise.all(folders.map(async (path) => {
             const filePaths = await getFilePaths(path, 'md');
-            for await (const filePath of filePaths) {
+            await Promise.all(filePaths.map(async (filePath) => {
                 const fileContent = await readFile(filePath, {encoding: 'utf-8'});
                 if (fileContent) {
                     content.push(fileContent
                         .trim()
                         .concat('\n'));
                 }
-            }
-        }
+            }));
+        }));
 
         const text = content
             .join('\n')
@@ -7463,13 +7463,13 @@ const getFolders = async (sources) => {
 
     const folders = [];
 
-    for await (const source of sources.split(/, */g)) {
+    Promise.all(sources.split(/, */g).map(async (source) => {
         if (glob.hasMagic(source)) {
             folders.push(...await globPromise(source.endsWith('/') ? source : `${source}/`));
         } else {
             folders.push(!source.endsWith('/') ? `${source}/` : source);
         }
-    }
+    }));
 
     return folders;
 };
