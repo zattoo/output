@@ -1,4 +1,4 @@
-name: 'PR Body Output'
+name: 'PR Output'
 description: 'Outputs markdown content to pull requests'
 inputs:
   token:
