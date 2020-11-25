@@ -44,11 +44,16 @@ const updatePullRequestBody = async ({
  * @returns {string}
  */
 const combineBody = (previousBody, text) => {
-    return previousBody
-        .replace(/<!-- output start -->(.|\n)*<!-- output end -->/gi, '')
-        .trim()
-        .concat('\n\n')
-        .concat(`<!-- output start -->\n${text}\n<!-- output end -->`);
+    if (/<!-- output start -->(.|\n)*<!-- output end -->/gi.test(previousBody)) {
+        return previousBody
+            .replace(/<!-- output start -->(.|\n)*<!-- output end -->/gi, `<!-- output start -->\n${text}\n<!-- output end -->`)
+            .trim();
+    } else {
+        return previousBody
+            .trim()
+            .concat('\n\n')
+            .concat(`<!-- output start -->\n${text}\n<!-- output end -->`);
+    }
 };
 
 module.exports = {
