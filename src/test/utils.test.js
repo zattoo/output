@@ -3,7 +3,7 @@ const {combineBody} = require('../utils');
 describe('CombineBody', () => {
     it('returns the the combined text', () => {
         const res = combineBody('foo', 'bar');
-        expect(JSON.stringify(res)).toBe(JSON.stringify('foo\n\n<!-- output start -->\nbar\n<!-- output end -->'));
+        expect(JSON.stringify(res)).toBe(JSON.stringify('foo\n<!-- output start -->\nbar\n<!-- output end -->'));
     });
 
     it('replaces the comment with a new one.', () => {

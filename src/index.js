@@ -16,11 +16,11 @@ const {
 const {
     combineBody,
     getPullRequestBody,
+    hasOutput,
     updatePullRequestBody,
 } = require('./utils');
 
 const run = async () => {
-    const content = [];
     const token = core.getInput('token', {required: true});
     const octokit = getOctokit(token);
 
@@ -39,6 +39,13 @@ const run = async () => {
             process.exit(0);
         }
 
+        const pullRequest = {
+            octokit,
+            owner,
+            repo,
+            pullNumber,
+        };
+        const outputContent = [];
         const folders = await getFolders(sources);
 
         await Promise.all(folders.map(async (path) => {
@@ -46,36 +53,29 @@ const run = async () => {
             await Promise.all(filePaths.map(async (filePath) => {
                 const fileContent = await readFile(filePath, {encoding: 'utf-8'});
                 if (fileContent) {
-                    content.push(fileContent
-                        .trim()
-                        .concat('\n'));
+                    outputContent.push(fileContent.trim());
                 }
             }));
         }));
 
-        const text = content
-            .join('\n')
-            .trim();
+        const pullRequestBody = await getPullRequestBody(pullRequest);
 
-        if (text) {
-            // Get PR body content
-            const pullRequestBody = await getPullRequestBody({
-                octokit,
-                owner,
-                repo,
-                pullNumber,
-            });
+        if (outputContent.length) {
+            const body = combineBody(pullRequestBody, outputContent.join('\n'));
 
             updatePullRequestBody({
-                octokit,
-                owner,
-                repo,
-                pullNumber,
-                body: combineBody(pullRequestBody, text),
+                ...pullRequest,
+                body,
+            });
+        } else if (hasOutput(pullRequestBody)) {
+            updatePullRequestBody({
+                ...pullRequest,
+                body: combineBody(pullRequestBody),
             });
         }
     } catch (error) {
         core.setFailed(error.message);
+        console.error(error);
     }
 };
 
