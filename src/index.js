@@ -60,18 +60,16 @@ const run = async () => {
 
         const pullRequestBody = await getPullRequestBody(pullRequest);
 
-        core.info(folders);
-        core.info(outputContent);
-
-        core.info('------------');
-        core.info(pullRequestBody);
-        core.info('------------');
+        // Debug
+        core.info({folders});
+        core.info({outputContent});
+        core.info({pullRequestBody});
 
         if (outputContent.length) {
             const body = combineBody(pullRequestBody, outputContent.join('\n'));
             core.info('Adding output to PR comment');
 
-            core.info(body);
+            core.info({body});
 
             updatePullRequestBody({
                 ...pullRequest,
@@ -81,7 +79,7 @@ const run = async () => {
             core.info('Cleaning output from PR comment');
             const body = combineBody(pullRequestBody);
 
-            core.info(body);
+            core.info({body});
 
             updatePullRequestBody({
                 ...pullRequest,
