@@ -7087,6 +7087,8 @@ exports.HttpClient = HttpClient;
 /***/ 543:
 /***/ (function(module) {
 
+const outputRegex = /<!-- output start -->(.|\n)*<!-- output end -->/i;
+
 /**
  * Returns the body of the given pull request
  * @param {PullRequest} params
@@ -7127,26 +7129,40 @@ const updatePullRequestBody = async ({
 };
 
 /**
- * Cleans the previous body and attaches the new information
- * @param {string} previousBody
- * @param {string} text
+ * Indicates if a text
+ * contains the output block
+ *
+ * @param {string} commentBody
  * @returns {string}
  */
-const combineBody = (previousBody, text) => {
-    if (/<!-- output start -->(.|\n)*<!-- output end -->/gi.test(previousBody)) {
-        return previousBody
-            .replace(/<!-- output start -->(.|\n)*<!-- output end -->/gi, `<!-- output start -->\n${text}\n<!-- output end -->`)
-            .trim();
+const hasOutput = (commentBody) => {
+    return outputRegex.test(commentBody);
+};
+
+/**
+ * Cleans the previous output and attaches the new information
+ * @param {string} previousBody - comment in the pull request
+ * @param {string} [outputText] - without content will clean the previous output
+ * @returns {string}
+ */
+const combineBody = (previousBody, outputText) => {
+    if (hasOutput(previousBody)) {
+        return previousBody.replace(
+            outputRegex,
+            outputText ? `<!-- output start -->\n${outputText}\n<!-- output end -->` : '',
+        ).trim();
     } else {
-        return previousBody
-            .trim()
-            .concat('\n\n')
-            .concat(`<!-- output start -->\n${text}\n<!-- output end -->`);
+        return outputText
+            ? previousBody
+                .trim()
+                .concat(`\n<!-- output start -->\n${outputText}\n<!-- output end -->`)
+            : previousBody;
     }
 };
 
 module.exports = {
     combineBody,
+    hasOutput,
     getPullRequestBody,
     updatePullRequestBody,
 };
@@ -7351,11 +7367,11 @@ const {
 const {
     combineBody,
     getPullRequestBody,
+    hasOutput,
     updatePullRequestBody,
 } = __webpack_require__(543);
 
 const run = async () => {
-    const content = [];
     const token = core.getInput('token', {required: true});
     const octokit = getOctokit(token);
 
@@ -7374,6 +7390,13 @@ const run = async () => {
             process.exit(0);
         }
 
+        const pullRequest = {
+            octokit,
+            owner,
+            repo,
+            pullNumber,
+        };
+        const outputContent = [];
         const folders = await getFolders(sources);
 
         await Promise.all(folders.map(async (path) => {
@@ -7381,36 +7404,36 @@ const run = async () => {
             await Promise.all(filePaths.map(async (filePath) => {
                 const fileContent = await readFile(filePath, {encoding: 'utf-8'});
                 if (fileContent) {
-                    content.push(fileContent
-                        .trim()
-                        .concat('\n'));
+                    outputContent.push(fileContent.trim());
                 }
             }));
         }));
 
-        const text = content
-            .join('\n')
-            .trim();
+        const pullRequestBody = await getPullRequestBody(pullRequest);
 
-        if (text) {
-            // Get PR body content
-            const pullRequestBody = await getPullRequestBody({
-                octokit,
-                owner,
-                repo,
-                pullNumber,
-            });
+        core.info(folders);
+        core.info(outputContent);
+
+        if (outputContent.length) {
+            const body = combineBody(pullRequestBody, outputContent.join('\n'));
+            core.info('Adding output to PR comment');
 
             updatePullRequestBody({
-                octokit,
-                owner,
-                repo,
-                pullNumber,
-                body: combineBody(pullRequestBody, text),
+                ...pullRequest,
+                body,
             });
+        } else if (hasOutput(pullRequestBody)) {
+            core.info('Cleaning output from PR comment');
+            updatePullRequestBody({
+                ...pullRequest,
+                body: combineBody(pullRequestBody),
+            });
+        } else {
+            console.info('Doing nothing, comment does not need changes');
         }
     } catch (error) {
         core.setFailed(error.message);
+        console.error(error);
     }
 };
 
