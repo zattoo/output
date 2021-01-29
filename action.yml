@@ -5,12 +5,8 @@ inputs:
     description: 'GitHub token'
     required: true
   sources:
-    description: 'String with folders containing md files separated by commas'
+    description: 'String with folders containing md files separated by commas (Supports glob pattern)'
     required: true
-  ignoreActionLabel:
-    description: 'Label to avoid executing the action'
-    required: false
-    default: '-output'
 runs:
   using: 'node12'
   main: 'dist/index.js'

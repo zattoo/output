@@ -13,14 +13,8 @@ Required. GitHub token
 
 `array of strings`
 
-String with folders containing md files separated by commas
-Example : 'projects/app/stats, projects/embed/errors/'
-
-### `ignoreActionLabel`
-
-`string`,  default: `-output`
-
-Pull request label name to avoid executing the action
+String with folders containing md files separated by commas (Supports glob pattern)
+Example : 'projects/app/stats/, projects/embed/errors/'
 
 ## Usage Example
 
