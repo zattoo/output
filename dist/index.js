@@ -7414,9 +7414,15 @@ const run = async () => {
         core.info(folders);
         core.info(outputContent);
 
+        core.info('------------');
+        core.info(pullRequestBody);
+        core.info('------------');
+
         if (outputContent.length) {
             const body = combineBody(pullRequestBody, outputContent.join('\n'));
             core.info('Adding output to PR comment');
+
+            core.info(body);
 
             updatePullRequestBody({
                 ...pullRequest,
@@ -7424,9 +7430,13 @@ const run = async () => {
             });
         } else if (hasOutput(pullRequestBody)) {
             core.info('Cleaning output from PR comment');
+            const body = combineBody(pullRequestBody);
+
+            core.info(body);
+
             updatePullRequestBody({
                 ...pullRequest,
-                body: combineBody(pullRequestBody),
+                body,
             });
         } else {
             console.info('Doing nothing, comment does not need changes');
