@@ -1,4 +1,4 @@
-const outputRegex = /<!-- output start -->(.|\r\n)*<!-- output end -->/i;
+const outputRegex = /<!-- output start -->(.|\r\n|\n)*<!-- output end -->/i;
 
 /**
  * Returns the body of the given pull request

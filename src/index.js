@@ -60,33 +60,30 @@ const run = async () => {
 
         const pullRequestBody = await getPullRequestBody(pullRequest);
 
-        // Debug
-        core.info({folders});
-        core.info({outputContent});
-        core.info({pullRequestBody});
+        core.debug({folders});
+        core.debug({outputContent});
+        core.debug({pullRequestBody});
 
         if (outputContent.length) {
             const body = combineBody(pullRequestBody, outputContent.join('\n'));
             core.info('Adding output to PR comment');
-
-            core.info({body});
+            core.debug({body});
 
             updatePullRequestBody({
                 ...pullRequest,
                 body,
             });
         } else if (hasOutput(pullRequestBody)) {
-            core.info('Cleaning output from PR comment');
             const body = combineBody(pullRequestBody);
-
-            core.info({body});
+            core.info('Cleaning output from PR comment');
+            core.debug({body});
 
             updatePullRequestBody({
                 ...pullRequest,
                 body,
             });
         } else {
-            console.info('Doing nothing, comment does not need changes');
+            core.info('Doing nothing, comment does not need new output or clean up');
         }
     } catch (error) {
         core.setFailed(error.message);
