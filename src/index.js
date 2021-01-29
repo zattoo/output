@@ -60,19 +60,19 @@ const run = async () => {
 
         const pullRequestBody = await getPullRequestBody(pullRequest);
 
-        console.info(folders);
-        console.info(outputContent);
+        core.info(folders);
+        core.info(outputContent);
 
         if (outputContent.length) {
             const body = combineBody(pullRequestBody, outputContent.join('\n'));
-            console.info('Adding output to PR comment');
+            core.info('Adding output to PR comment');
 
             updatePullRequestBody({
                 ...pullRequest,
                 body,
             });
         } else if (hasOutput(pullRequestBody)) {
-            console.info('Cleaning output from PR comment');
+            core.info('Cleaning output from PR comment');
             updatePullRequestBody({
                 ...pullRequest,
                 body: combineBody(pullRequestBody),
