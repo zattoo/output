@@ -7149,7 +7149,7 @@ const combineBody = (previousBody, outputText) => {
     if (hasOutput(previousBody)) {
         return previousBody.replace(
             outputRegex,
-            outputText ? `<!-- output start -->\n${outputText}\n<!-- output end -->` : '',
+            outputText ? `\n<!-- output start -->\n${outputText}\n<!-- output end -->` : '',
         ).trim();
     } else {
         return outputText
@@ -7376,20 +7376,12 @@ const run = async () => {
     const octokit = getOctokit(token);
 
     const sources = core.getInput('sources', {required: true});
-    const ignoreActionLabel = core.getInput('ignoreActionLabel');
 
     const repo = context.payload.repository.name;
     const owner = context.payload.repository.full_name.split('/')[0];
     const pullNumber = context.payload.pull_request.number;
-    const labels = context.payload.pull_request.labels.map((label) => label.name);
 
     try {
-        // Ignore the action if -output label (or custom name) exists
-        if (labels.includes(ignoreActionLabel)) {
-            core.info(`Ignore the action due to label ${ignoreActionLabel}`);
-            process.exit(0);
-        }
-
         const pullRequest = {
             octokit,
             owner,
