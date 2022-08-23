@@ -7149,7 +7149,7 @@ const combineBody = (previousBody, outputText) => {
     if (hasOutput(previousBody)) {
         return previousBody.replace(
             outputRegex,
-            outputText ? `<!-- output start -->\n${outputText}\n<!-- output end -->` : '',
+            outputText ? `\n<!-- output start -->\n${outputText}\n<!-- output end -->` : '',
         ).trim();
     } else {
         return outputText
