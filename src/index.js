@@ -26,6 +26,7 @@ const run = async () => {
 
     const sources = core.getInput('sources', {required: true});
     const name = core.getInput('name', {required: true});
+    const top = core.getInput('top', {required: false}) === 'true';
 
     const repo = context.payload.repository.name;
     const owner = context.payload.repository.full_name.split('/')[0];
@@ -58,7 +59,13 @@ const run = async () => {
         core.debug({pullRequestBody});
 
         if (outputContent.length) {
-            const body = combineBody(name, pullRequestBody, outputContent.join('\n'));
+            const body = combineBody({
+                name,
+                top,
+                previousBody: pullRequestBody,
+                outputText: outputContent.join('\n'),
+            });
+
             core.info('Adding output to PR comment');
             core.debug({body});
 
@@ -67,7 +74,11 @@ const run = async () => {
                 body,
             });
         } else if (hasOutput(pullRequestBody)) {
-            const body = combineBody(name, pullRequestBody);
+            const body = combineBody({
+                name,
+                previousBody: pullRequestBody,
+            });
+
             core.info('Cleaning output from PR comment');
             core.debug({body});
 

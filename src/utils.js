@@ -60,24 +60,29 @@ const hasOutput = (name, commentBody) => {
 
 /**
  * Cleans the previous output and attaches the new information
- * @param {string} name
- * @param {string} previousBody - comment in the pull request
- * @param {string} [outputText] - without content will clean the previous output
- * @returns {string}
+ * @param {CombineBodyData} data
+ * @return {string}
  */
-const combineBody = (name, previousBody, outputText) => {
+const combineBody = (data) => {
+    const {
+        previousBody,
+        outputText,
+        name,
+    } = data;
+
+    const output = `\n<!-- output start - ${name} -->\n${outputText}\n<!-- output end - ${name} -->`;
+
     if (hasOutput(name, previousBody)) {
         return previousBody.replace(
             getOutputRegex(name),
-            outputText ? `\n<!-- output start - ${name} -->\n${outputText}\n<!-- output end - ${name} -->` : '',
+            outputText ? output : '',
         ).trim();
+    } else if (!outputText) {
+        return previousBody;
+    } else if (data.top) {
+        return output.concat(previousBody);
     } else {
-        console.log('here');
-        return outputText
-            ? previousBody
-                .trim()
-                .concat(`\n<!-- output start - ${name} -->\n${outputText}\n<!-- output end - ${name} -->`)
-            : previousBody;
+        return previousBody.trim().concat(output);
     }
 };
 
@@ -100,3 +105,11 @@ module.exports = {
   * @typedef {Object} UpdatePullRequest
   * @param {string} body
   */
+
+/**
+ * @typedef {Object} CombineBodyData
+ * @prop {string} name - name of the output entity
+ * @prop {string} previousBody - comment in the pull request
+ * @prop {boolean} [top]
+ * @prop {string} [outputText] - without content will clean the previous output
+ */

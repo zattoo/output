@@ -10,6 +10,10 @@ inputs:
   name:
     description: 'Unique name for the specific output job'
     required: true
+  top:
+    required: false
+    description: 'indicates if output should be on top of the description'
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'
