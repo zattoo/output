@@ -7,6 +7,9 @@ inputs:
   sources:
     description: 'String with folders containing md files separated by commas (Supports glob pattern)'
     required: true
+  name:
+    description: 'Unique name for the specific output job'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'

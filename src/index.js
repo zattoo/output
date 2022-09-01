@@ -25,6 +25,7 @@ const run = async () => {
     const octokit = getOctokit(token);
 
     const sources = core.getInput('sources', {required: true});
+    const name = core.getInput('name', {required: true});
 
     const repo = context.payload.repository.name;
     const owner = context.payload.repository.full_name.split('/')[0];
@@ -57,20 +58,20 @@ const run = async () => {
         core.debug({pullRequestBody});
 
         if (outputContent.length) {
-            const body = combineBody(pullRequestBody, outputContent.join('\n'));
+            const body = combineBody(name, pullRequestBody, outputContent.join('\n'));
             core.info('Adding output to PR comment');
             core.debug({body});
 
-            updatePullRequestBody({
+            await updatePullRequestBody({
                 ...pullRequest,
                 body,
             });
         } else if (hasOutput(pullRequestBody)) {
-            const body = combineBody(pullRequestBody);
+            const body = combineBody(name, pullRequestBody);
             core.info('Cleaning output from PR comment');
             core.debug({body});
 
-            updatePullRequestBody({
+            await updatePullRequestBody({
                 ...pullRequest,
                 body,
             });

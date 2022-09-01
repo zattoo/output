@@ -1,4 +1,11 @@
-const outputRegex = /<!-- output start -->(.|\r\n|\n)*<!-- output end -->/i;
+/**
+ *
+ * @param {string} name
+ * @returns {RegExp}
+ */
+const getOutputRegex = (name) => {
+    return new RegExp(`<!-- output start - ${name} -->(.|\\r\\n|\\n)*<!-- output end - ${name} -->`, 'i');
+};
 
 /**
  * Returns the body of the given pull request
@@ -43,30 +50,33 @@ const updatePullRequestBody = async ({
  * Indicates if a text
  * contains the output block
  *
+ * @param {string} name
  * @param {string} commentBody
- * @returns {string}
+ * @returns {boolean}
  */
-const hasOutput = (commentBody) => {
-    return outputRegex.test(commentBody);
+const hasOutput = (name, commentBody) => {
+    return getOutputRegex(name).test(commentBody);
 };
 
 /**
  * Cleans the previous output and attaches the new information
+ * @param {string} name
  * @param {string} previousBody - comment in the pull request
  * @param {string} [outputText] - without content will clean the previous output
  * @returns {string}
  */
-const combineBody = (previousBody, outputText) => {
-    if (hasOutput(previousBody)) {
+const combineBody = (name, previousBody, outputText) => {
+    if (hasOutput(name, previousBody)) {
         return previousBody.replace(
-            outputRegex,
-            outputText ? `\n<!-- output start -->\n${outputText}\n<!-- output end -->` : '',
+            getOutputRegex(name),
+            outputText ? `\n<!-- output start - ${name} -->\n${outputText}\n<!-- output end - ${name} -->` : '',
         ).trim();
     } else {
+        console.log('here');
         return outputText
             ? previousBody
                 .trim()
-                .concat(`\n<!-- output start -->\n${outputText}\n<!-- output end -->`)
+                .concat(`\n<!-- output start - ${name} -->\n${outputText}\n<!-- output end - ${name} -->`)
             : previousBody;
     }
 };
