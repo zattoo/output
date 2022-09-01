@@ -80,7 +80,7 @@ const combineBody = (data) => {
     } else if (!outputText) {
         return previousBody;
     } else if (data.top) {
-        return output.concat(previousBody);
+        return output.concat(`\n${previousBody}`);
     } else {
         return previousBody.trim().concat(output);
     }
