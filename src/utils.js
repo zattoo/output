@@ -1,4 +1,11 @@
-const outputRegex = /<!-- output start -->(.|\r\n|\n)*<!-- output end -->/i;
+/**
+ *
+ * @param {string} name
+ * @returns {RegExp}
+ */
+const getOutputRegex = (name) => {
+    return new RegExp(`<!-- output start - ${name} -->(.|\\r\\n|\\n)*<!-- output end - ${name} -->`, 'i');
+};
 
 /**
  * Returns the body of the given pull request
@@ -43,31 +50,39 @@ const updatePullRequestBody = async ({
  * Indicates if a text
  * contains the output block
  *
+ * @param {string} name
  * @param {string} commentBody
- * @returns {string}
+ * @returns {boolean}
  */
-const hasOutput = (commentBody) => {
-    return outputRegex.test(commentBody);
+const hasOutput = (name, commentBody) => {
+    return getOutputRegex(name).test(commentBody);
 };
 
 /**
  * Cleans the previous output and attaches the new information
- * @param {string} previousBody - comment in the pull request
- * @param {string} [outputText] - without content will clean the previous output
- * @returns {string}
+ * @param {CombineBodyData} data
+ * @return {string}
  */
-const combineBody = (previousBody, outputText) => {
-    if (hasOutput(previousBody)) {
+const combineBody = (data) => {
+    const {
+        previousBody,
+        outputText,
+        name,
+    } = data;
+
+    const output = `\n<!-- output start - ${name} -->\n${outputText}\n<!-- output end - ${name} -->`;
+
+    if (hasOutput(name, previousBody)) {
         return previousBody.replace(
-            outputRegex,
-            outputText ? `\n<!-- output start -->\n${outputText}\n<!-- output end -->` : '',
+            getOutputRegex(name),
+            outputText ? output : '',
         ).trim();
+    } else if (!outputText) {
+        return previousBody;
+    } else if (data.top) {
+        return output.concat(`\n${previousBody}`);
     } else {
-        return outputText
-            ? previousBody
-                .trim()
-                .concat(`\n<!-- output start -->\n${outputText}\n<!-- output end -->`)
-            : previousBody;
+        return previousBody.trim().concat(output);
     }
 };
 
@@ -90,3 +105,11 @@ module.exports = {
   * @typedef {Object} UpdatePullRequest
   * @param {string} body
   */
+
+/**
+ * @typedef {Object} CombineBodyData
+ * @prop {string} name - name of the output entity
+ * @prop {string} previousBody - comment in the pull request
+ * @prop {boolean} [top]
+ * @prop {string} [outputText] - without content will clean the previous output
+ */
