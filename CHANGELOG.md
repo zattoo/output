@@ -5,7 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 ## [2.0.0] - Unreleased
 
-Added unique name for each output entity
+## Added
+- Unique name for each output entity
+- Option to position content on top of the pull-request description
 
 ## [1.0.1] - 23.08.2022
 

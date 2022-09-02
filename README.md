@@ -16,6 +16,19 @@ Required. GitHub token
 String with folders containing md files separated by commas (Supports glob pattern)
 Example : 'projects/app/stats/, projects/embed/errors/'
 
+### `name`
+
+`string`
+
+Required. Name to identify the output entity
+
+### `top`
+
+`string - boolean like`
+
+Optional. set to `true` to position content at the top of the pull requests description
+
+
 ## Usage Example
 
 ````yaml
