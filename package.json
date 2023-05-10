@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "lint": "eslint .",
-    "package": "NODE_OPTIONS=--openssl-legacy-provider ncc build src/index.js -o dist",
+    "package": "ncc build src/index.js -o dist",
     "test": "npm run lint && npm run types && jest",
     "types": "tsc"
   },
@@ -27,12 +27,12 @@
   "dependencies": {
     "@actions/core": "1.10.0",
     "@actions/github": "5.1.1",
+    "@vercel/ncc": "^0.36.1",
     "glob": "10.2.3"
   },
   "devDependencies": {
     "@types/jest": "29.5.1",
     "@zattoo/eslint-config": "15.1.0",
-    "@zeit/ncc": "0.22.3",
     "eslint": "8.40.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "27.2.1",
