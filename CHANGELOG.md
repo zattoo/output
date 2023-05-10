@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## Unreleased
+
+### Infrastructure
+- Upgrade to node `20`
+- Updated dependencies
+- Added typescript check
+- Added jest types
+
 ## [2.0.0] - 02.09.2022
 
 ## Added
