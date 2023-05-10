@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 - Updated dependencies
 - Added typescript check
 - Added jest types
+- Replaced `@zeit/ncc` for `@vercel/ncc`
 
 ## [2.0.0] - 02.09.2022
 
