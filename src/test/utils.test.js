@@ -1,4 +1,4 @@
-const {combineBody} = require('../utils');
+const {combineBody} = require('../utils.js');
 
 describe('CombineBody', () => {
     it('returns the the combined text', () => {
@@ -7,6 +7,7 @@ describe('CombineBody', () => {
             previousBody: 'foo',
             outputText: 'bar',
         });
+
         expect(JSON.stringify(res)).toBe(JSON.stringify('foo\n<!-- output start - bar -->\nbar\n<!-- output end - bar -->'));
     });
 
@@ -16,6 +17,7 @@ describe('CombineBody', () => {
             previousBody: 'bar\n\n<!-- output start - bar -->\nbar\n<!-- output end - bar -->',
             outputText: 'baz',
         });
+
         expect(JSON.stringify(res)).toBe(JSON.stringify('bar\n\n\n<!-- output start - bar -->\nbaz\n<!-- output end - bar -->'));
     });
 
@@ -25,6 +27,7 @@ describe('CombineBody', () => {
             previousBody: 'bar\n\n<!-- output start - bar -->\nbar\n<!-- output end - bar -->\n\nzap',
             outputText: 'baz',
         });
+
         expect(JSON.stringify(res)).toBe(JSON.stringify('bar\n\n\n<!-- output start - bar -->\nbaz\n<!-- output end - bar -->\n\nzap'));
     });
 });

@@ -5,6 +5,7 @@ const globPromise = util.promisify(glob);
 
 /**
  * List all folders specified in sources
+ *
  * @param {string} [sources]
  * @returns {Promise<string[]>}
  */
@@ -31,9 +32,10 @@ const getFolders = async (sources) => {
  * Gives an array with the paths
  * of the files matching the extension
  * in the given folder
+ *
  * @param {string} folder
  * @param {string} extension
- * @return {Promise<string[]>}
+ * @returns {Promise<string[]>}
  */
 const getFilePaths = (folder, extension) => {
     return globPromise(`${folder}*.${extension}`);

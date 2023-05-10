@@ -9,6 +9,7 @@ const getOutputRegex = (name) => {
 
 /**
  * Returns the body of the given pull request
+ *
  * @param {PullRequest} params
  */
 const getPullRequestBody = async ({
@@ -29,6 +30,7 @@ const getPullRequestBody = async ({
 /**
  * Updates the body of a pull request
  * with the given text
+ *
  * @param {PullRequest & UpdatePullRequest} param
  */
 const updatePullRequestBody = async ({
@@ -60,8 +62,9 @@ const hasOutput = (name, commentBody) => {
 
 /**
  * Cleans the previous output and attaches the new information
+ *
  * @param {CombineBodyData} data
- * @return {string}
+ * @returns {string}
  */
 const combineBody = (data) => {
     const {
@@ -95,16 +98,16 @@ module.exports = {
 
 /**
  * @typedef {Object} PullRequest
- * @prop {Function} octokit
+ * @prop {InstanceType<typeof GitHub>} octokit
  * @prop {string} owner
  * @prop {string} repo
  * @prop {number} pullNumber
  */
 
 /**
-  * @typedef {Object} UpdatePullRequest
-  * @param {string} body
-  */
+ * @typedef {Object} UpdatePullRequest
+ * @param {string} body
+ */
 
 /**
  * @typedef {Object} CombineBodyData
@@ -112,4 +115,8 @@ module.exports = {
  * @prop {string} previousBody - comment in the pull request
  * @prop {boolean} [top]
  * @prop {string} [outputText] - without content will clean the previous output
+ */
+
+/**
+ * @typedef {import('@actions/github').GitHub} GitHub
  */

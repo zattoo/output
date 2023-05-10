@@ -11,14 +11,14 @@ const {
 const {
     getFolders,
     getFilePaths,
-} = require('./files');
+} = require('./files.js');
 
 const {
     combineBody,
     getPullRequestBody,
     hasOutput,
     updatePullRequestBody,
-} = require('./utils');
+} = require('./utils.js');
 
 const run = async () => {
     const token = core.getInput('token', {required: true});
@@ -44,8 +44,10 @@ const run = async () => {
 
         await Promise.all(folders.map(async (path) => {
             const filePaths = await getFilePaths(path, 'md');
+
             await Promise.all(filePaths.map(async (filePath) => {
                 const fileContent = await readFile(filePath, {encoding: 'utf-8'});
+
                 if (fileContent) {
                     outputContent.push(fileContent.trim());
                 }
