@@ -1,7 +1,4 @@
-const glob = require('glob');
-const util = require('util');
-
-const globPromise = util.promisify(glob);
+const {glob} = require('glob');
 
 /**
  * List all folders specified in sources
@@ -15,11 +12,12 @@ const getFolders = async (sources) => {
         return [''];
     }
 
+    /** @type {string[]} */
     const folders = [];
 
     await Promise.all(sources.split(/, */g).map(async (source) => {
         if (glob.hasMagic(source)) {
-            folders.push(...await globPromise(source.endsWith('/') ? source : `${source}/`));
+            folders.push(...await glob(source.endsWith('/') ? source : `${source}/`));
         } else {
             folders.push(!source.endsWith('/') ? `${source}/` : source);
         }
@@ -38,7 +36,7 @@ const getFolders = async (sources) => {
  * @returns {Promise<string[]>}
  */
 const getFilePaths = (folder, extension) => {
-    return globPromise(`${folder}*.${extension}`);
+    return glob(`${folder}*.${extension}`);
 };
 
 module.exports = {

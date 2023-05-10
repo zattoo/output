@@ -19,9 +19,9 @@
     "resolveJsonModule": true,
   },
   "types": [
-    "node",
-    "jest"
-],
+    "jest",
+    "node"
+  ],
   "exclude": [
     "dist"
   ]

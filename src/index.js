@@ -39,6 +39,7 @@ const run = async () => {
             repo,
             pullNumber,
         };
+        /** @type {string[]} */
         const outputContent = [];
         const folders = await getFolders(sources);
 
@@ -56,9 +57,9 @@ const run = async () => {
 
         const pullRequestBody = await getPullRequestBody(pullRequest);
 
-        core.debug({folders});
-        core.debug({outputContent});
-        core.debug({pullRequestBody});
+        core.debug(JSON.stringify({folders}));
+        core.debug(JSON.stringify({outputContent}));
+        core.debug(JSON.stringify({pullRequestBody}));
 
         if (outputContent.length) {
             const body = combineBody({
@@ -69,20 +70,20 @@ const run = async () => {
             });
 
             core.info('Adding output to PR comment');
-            core.debug({body});
+            core.debug(JSON.stringify({body}));
 
             await updatePullRequestBody({
                 ...pullRequest,
                 body,
             });
-        } else if (hasOutput(pullRequestBody)) {
+        } else if (hasOutput(name, pullRequestBody)) {
             const body = combineBody({
                 name,
                 previousBody: pullRequestBody,
             });
 
             core.info('Cleaning output from PR comment');
-            core.debug({body});
+            core.debug(JSON.stringify({body}));
 
             await updatePullRequestBody({
                 ...pullRequest,
@@ -92,7 +93,10 @@ const run = async () => {
             core.info('Doing nothing, comment does not need new output or clean up');
         }
     } catch (error) {
-        core.setFailed(error.message);
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
+
         console.error(error);
     }
 };

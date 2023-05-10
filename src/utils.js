@@ -18,7 +18,7 @@ const getPullRequestBody = async ({
     repo,
     pullNumber,
 }) => {
-    const {data} = await octokit.pulls.get({
+    const {data} = await octokit.rest.pulls.get({
         owner,
         repo,
         pull_number: pullNumber,
@@ -40,7 +40,7 @@ const updatePullRequestBody = async ({
     pullNumber,
     body,
 }) => {
-    await octokit.pulls.update({
+    await octokit.rest.pulls.update({
         owner,
         repo,
         pull_number: pullNumber,
@@ -97,16 +97,16 @@ module.exports = {
 };
 
 /**
- * @typedef {Object} PullRequest
- * @prop {InstanceType<typeof GitHub>} octokit
+ * @typedef {object} PullRequest
+ * @prop {ReturnType<getOctokit>} octokit
  * @prop {string} owner
  * @prop {string} repo
  * @prop {number} pullNumber
  */
 
 /**
- * @typedef {Object} UpdatePullRequest
- * @param {string} body
+ * @typedef {object} UpdatePullRequest
+ * @prop {string} body
  */
 
 /**
@@ -118,5 +118,5 @@ module.exports = {
  */
 
 /**
- * @typedef {import('@actions/github').GitHub} GitHub
+ * @typedef {import('@actions/github').getOctokit} getOctokit
  */
