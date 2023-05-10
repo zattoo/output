@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "types": [],
+    "moduleResolution": "node",
+    "target": "esnext",
+    "module": "esnext",
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true,
+    "experimentalDecorators": true,
+    "preserveSymlinks": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "strictNullChecks": false,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+  },
+  "types": [
+    "jest",
+    "node"
+  ],
+  "exclude": [
+    "dist"
+  ]
+}
