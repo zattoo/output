@@ -15,7 +15,7 @@ inputs:
     description: 'indicates if output should be on top of the description'
     default: 'false'
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'dist/index.js'
 branding:
   icon: edit-2
