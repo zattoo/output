@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
-## Unreleased
+## [3.0.0] - 10.05.2023
 
 ### Infrastructure
 - Upgrade to node `20`
