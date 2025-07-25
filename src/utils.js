@@ -24,7 +24,7 @@ const getPullRequestBody = async ({
         pull_number: pullNumber,
     });
 
-    return data.body;
+    return data.body || '';
 };
 
 /**
@@ -57,6 +57,10 @@ const updatePullRequestBody = async ({
  * @returns {boolean}
  */
 const hasOutput = (name, commentBody) => {
+    if (!commentBody) {
+        return false;
+    }
+
     return getOutputRegex(name).test(commentBody);
 };
 

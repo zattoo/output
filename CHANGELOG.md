@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [3.0.1] - 25.07.2025
+
+## Fixed
+- [FE-1483](https://zattoo2.atlassian.net/browse/FE-1483) Fix crash when PR description is empty
+
 ## [3.0.0] - 10.05.2023
 
 ### Infrastructure
