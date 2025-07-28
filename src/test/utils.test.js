@@ -30,4 +30,14 @@ describe('CombineBody', () => {
 
         expect(JSON.stringify(res)).toBe(JSON.stringify('bar\n\n\n<!-- output start - bar -->\nbaz\n<!-- output end - bar -->\n\nzap'));
     });
+
+    it('returns the previous body if no output is provided', () => {
+        const res = combineBody({
+            name: 'bar',
+            previousBody: 'foo',
+            outputText: '',
+        });
+
+        expect(JSON.stringify(res)).toBe(JSON.stringify('foo'));
+    });
 });
