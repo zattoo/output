@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
-    "types": [],
-    "moduleResolution": "node",
+    "types": [
+      "jest",
+      "node"
+    ],
+    "moduleResolution": "bundler",
     "target": "esnext",
     "module": "esnext",
     "noEmit": true,
+    "skipLibCheck": true,
     "allowJs": true,
     "checkJs": true,
     "experimentalDecorators": true,
@@ -18,10 +22,6 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
   },
-  "types": [
-    "jest",
-    "node"
-  ],
   "exclude": [
     "dist"
   ]
