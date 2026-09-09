@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Output
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - uses: zattoo/output@v1
         with:
           token: ${{github.token}}
