@@ -44,3 +44,4 @@ jobs:
         with:
           token: ${{github.token}}
           sources: 'src/projects/a/, src/projects/b/'
+          name: 'stats'
