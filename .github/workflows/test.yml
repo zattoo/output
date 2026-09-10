@@ -14,9 +14,12 @@ jobs:
     name: Output
     if: contains(github.head_ref, 'dependabot') != true
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v7
       - uses: ./ # Uses an action in the root directory
         with:
           token: ${{github.token}}
           sources: 'src/examples/'
+          name: 'test'
